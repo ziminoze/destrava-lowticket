@@ -525,7 +525,7 @@ footer button{text-decoration:underline;text-underline-offset:3px}
         <div class="frag" data-to="3">rascunho-final-v3.txt</div>
         <div class="frag" data-to="5">print da headline</div>
       </div>
-      <p class="asm-cap" id="asmCap"><span class="c1">Partes soltas em várias conversas</span><span class="c2">Um percurso. Um link no ar.</span></p>
+      <p class="asm-cap" id="asmCap"><span class="c1">Partes soltas em várias conversas · role para juntar</span><span class="c2">Um percurso. Um link no ar.</span></p>
     </div>
   </div>
 </section>
@@ -899,6 +899,7 @@ function t(t,e,i){return Math.max(t,Math.min(e,i))}var e=class{isRunning=!1;valu
     win.style.minHeight='0';$('#tourWin .composer').style.position='static';
     $$('.step-btn').forEach(b=>b.classList.add('active'));
     const cap=$('#asmCap'); if(cap)cap.classList.add('done'); $$('.frag').forEach(f=>f.remove());
+    const fin=$('.piece.final'); if(fin)fin.classList.add('lit');
     $$('.step').forEach(s=>s.classList.add('on'));
     $('#railFill').style.transform='scaleY(1)';$('#stepsLine').style.transform='scaleY(1)';
     $$('.step-btn').forEach(b=>b.addEventListener('click',()=>$$('.tour-group')[+b.dataset.step].scrollIntoView({block:'center'})));
@@ -937,21 +938,33 @@ function t(t,e,i){return Math.max(t,Math.min(e,i))}var e=class{isRunning=!1;valu
   /* ---------- barra de progresso ---------- */
   gsap.to('.progress',{scaleX:1,ease:'none',scrollTrigger:{start:0,end:'max',scrub:0.3}});
 
-  /* ================= HERO — partes soltas que se juntam ================= */
+  /* ================= HERO — partes soltas que se juntam (guiado pelo scroll) ================= */
   try{(function assembly(){
     const asm=$('#asm'); if(!asm)return;
-    const pieces=$$('.piece',asm), frags=$$('.frag',asm), line=$('.asm-line',asm), cap=$('#asmCap');
-    const r=(a,b)=>a+Math.random()*(b-a);
-    pieces.forEach((p,i)=>gsap.set(p,{z:(i%3)*30}));
-    // estado inicial: fragmentos espalhados
-    frags.forEach(f=>gsap.set(f,{x:r(-40,asm.clientWidth-120),y:r(-60,asm.clientHeight),z:r(-260,160),rotation:r(-18,18)}));
-    const tl=gsap.timeline({delay:0.9,defaults:{ease:'power3.out'},onComplete:()=>{cap.classList.add('done');$('.piece.final',asm).classList.add('lit');}});
-    tl.from(pieces,{x:()=>r(-380,380),y:()=>r(-280,280),z:()=>r(-520,320),rotationX:()=>r(-75,75),rotationY:()=>r(-85,85),rotationZ:()=>r(-28,28),autoAlpha:0,duration:1.7,stagger:{each:0.13,from:'random'}},0);
-    frags.forEach((f,i)=>{const target=pieces[+f.dataset.to]; tl.to(f,{x:target.offsetLeft+36,y:target.offsetTop+8,z:0,rotation:0,scale:.55,autoAlpha:0,duration:1.25,ease:'power2.in'},0.35+i*0.09);});
-    tl.from(line,{scaleY:0,duration:.9,ease:'power2.out'},1.5);
-    tl.to(cap,{onStart:()=>cap.classList.add('done'),duration:.01},1.9);
-    // respiração sutil depois de montado
-    tl.add(()=>{gsap.to(pieces,{y:'+=4',duration:2.6,yoyo:true,repeat:-1,ease:'sine.inOut',stagger:{each:.18}});},2.6);
+    const pieces=$$('.piece',asm), frags=$$('.frag',asm), line=$('.asm-line',asm), cap=$('#asmCap'), final=$('.piece.final',asm);
+    const wide=matchMedia('(min-width:981px)').matches;
+    // gerador determinístico: a explosão é a mesma a cada carregamento (composição controlada)
+    let seed=7; const rnd=()=>{seed=(seed*9301+49297)%233280;return seed/233280}; const r=(a,b)=>a+rnd()*(b-a);
+    const W=asm.clientWidth, H=asm.clientHeight, sx=wide?0.38:0.3, sy=wide?0.72:0.42;
+    // estado inicial: tudo explodido
+    pieces.forEach((p,i)=>gsap.set(p,{x:r(-W*sx,W*sx),y:r(-H*sy,H*sy),z:r(-420,260),rotationX:r(-60,60),rotationY:r(-70,70),rotationZ:r(-22,22),transformOrigin:'50% 50%'}));
+    frags.forEach(f=>gsap.set(f,{x:r(-W*0.05,W*0.75),y:r(-H*0.25,H*0.95),z:r(-240,180),rotation:r(-16,16)}));
+    gsap.set(line,{scaleY:0});
+    // linha do tempo da montagem (é o scroll que a percorre)
+    const tl=gsap.timeline({defaults:{ease:'power2.inOut'},paused:true});
+    tl.to(pieces,{x:0,y:0,z:i=>(i%3)*30,rotationX:0,rotationY:0,rotationZ:0,duration:1,stagger:{each:0.09}},0);
+    frags.forEach((f,i)=>{const t=pieces[+f.dataset.to]; tl.to(f,{x:t.offsetLeft+36,y:t.offsetTop+8,z:0,rotation:0,scale:.5,autoAlpha:0,duration:.7,ease:'power2.in'},0.15+i*0.09);});
+    tl.to(line,{scaleY:1,duration:.5,ease:'power2.out'},1.05);
+    tl.to($('.c1',cap),{autoAlpha:0,duration:.25},1.15).to($('.c2',cap),{autoAlpha:1,duration:.3},1.2);
+    tl.to({},{duration:.45}); // pausa com a lista montada antes de liberar a rolagem
+    const onUpdate=st=>final.classList.toggle('lit',st.progress>0.82);
+    if(wide){
+      // desktop: hero fixo enquanto o scroll monta a lista
+      ScrollTrigger.create({trigger:'.hero',start:'top top',end:'+=150%',pin:true,pinSpacing:true,anticipatePin:1,scrub:0.6,animation:tl,refreshPriority:2,onUpdate});
+    }else{
+      // mobile: a cena monta conforme entra na tela
+      ScrollTrigger.create({trigger:'.hero-stage',start:'top 92%',end:'top 18%',scrub:0.5,animation:tl,refreshPriority:2,onUpdate});
+    }
   })();}catch(e){console.warn('Cena do hero desativada:',e.message)}
 
   /* ================= TIPOGRAFIA (SplitText) ================= */
@@ -1017,8 +1030,6 @@ function t(t,e,i){return Math.max(t,Math.min(e,i))}var e=class{isRunning=!1;valu
     gsap.fromTo(el,{y:-d},{y:d,ease:'none',scrollTrigger:{trigger:el.closest('section'),start:'top bottom',end:'bottom top',scrub:true}});
   });
   // hero: janela e chips flutuantes sobem em velocidades diferentes ao rolar
-  gsap.to('#asm',{y:-90,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
-  gsap.to('.hero-copy',{y:-40,autoAlpha:0.2,ease:'none',scrollTrigger:{trigger:'.hero',start:'40% top',end:'bottom top',scrub:true}});
 
   /* ================= PARALLAX DO MOUSE (3D no hero) ================= */
   try{(function heroTilt(){

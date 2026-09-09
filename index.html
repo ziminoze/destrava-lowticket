@@ -1033,8 +1033,6 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
     const d=+el.dataset.parallax;
     gsap.fromTo(el,{y:-d},{y:d,ease:'none',scrollTrigger:{trigger:el.closest('section'),start:'top bottom',end:'bottom top',scrub:true}});
   });
-  // 48h band
-  gsap.fromTo('#big48',{xPercent:4},{xPercent:-30,ease:'none',scrollTrigger:{trigger:'.band',start:'top bottom',end:'bottom top',scrub:0.6}});
   // hero: janela e chips flutuantes sobem em velocidades diferentes ao rolar
   gsap.to('#heroWin',{y:-90,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
   gsap.to('.hero-copy',{y:-40,autoAlpha:0.2,ease:'none',scrollTrigger:{trigger:'.hero',start:'40% top',end:'bottom top',scrub:true}});
@@ -1097,6 +1095,12 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
     }));
   })();}catch(e){staticFallback('tour: '+e.message)}
 
+  /* ================= FAIXA 48H (criada depois do tour: gatilhos criados antes de um pin não recebem o deslocamento do pin) ================= */
+  (function band(){const big=$('#big48'); if(!big)return;
+    const travel=()=>Math.min(big.scrollWidth-innerWidth*0.9, innerWidth*1.6);
+    gsap.fromTo(big,{x:()=>innerWidth*0.04},{x:()=>-travel(),ease:'none',immediateRender:true,scrollTrigger:{trigger:'.band',start:'top bottom',end:'bottom top',scrub:0.6,invalidateOnRefresh:true}});
+  })();
+
   /* ================= LINHA DOS PASSOS ================= */
   gsap.to('#stepsLine',{scaleY:1,ease:'none',scrollTrigger:{trigger:'#stepsList',start:'top 70%',end:'bottom 60%',scrub:true,
     onUpdate:s=>{const steps=$$('.step');steps.forEach((st,i)=>st.classList.toggle('on',s.progress>=(i+0.5)/steps.length||(i===0&&s.progress>0.02)));}}});
@@ -1115,7 +1119,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
   const pn=$('#priceNum'); const obj={v:0};
   gsap.to(obj,{v:67,duration:1.2,ease:'power3.out',scrollTrigger:{trigger:'.offer-box',start:'top 75%',once:true},onUpdate:()=>pn.textContent=Math.round(obj.v)});
 
-  addEventListener('load',()=>fontsReady.then(()=>ScrollTrigger.refresh()));
+  addEventListener('load',()=>fontsReady.then(()=>{ScrollTrigger.sort();ScrollTrigger.refresh();}));
   let lastW=innerWidth; addEventListener('resize',()=>{if(Math.abs(innerWidth-lastW)>40){lastW=innerWidth;ScrollTrigger.refresh();}});
 })();
 </script>

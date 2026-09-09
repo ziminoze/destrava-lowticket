@@ -947,7 +947,7 @@ function t(t,e,i){return Math.max(t,Math.min(e,i))}var e=class{isRunning=!1;valu
     let seed=7; const rnd=()=>{seed=(seed*9301+49297)%233280;return seed/233280}; const r=(a,b)=>a+rnd()*(b-a);
     const W=asm.clientWidth, H=asm.clientHeight, sx=wide?0.38:0.3, sy=wide?0.72:0.42;
     // estado inicial: tudo explodido
-    pieces.forEach((p,i)=>gsap.set(p,{x:r(-W*sx*0.55,W*sx),y:r(-H*sy,H*sy),z:r(-420,260),rotationX:r(-60,60),rotationY:r(-70,70),rotationZ:r(-22,22),transformOrigin:'50% 50%'}));
+    pieces.forEach((p,i)=>gsap.set(p,{x:r(wide?-W*0.04:-W*sx*0.5,W*sx),y:r(-H*sy,H*sy),z:r(-420,wide?80:200),rotationX:r(-60,60),rotationY:r(-70,70),rotationZ:r(-22,22),transformOrigin:'50% 50%'}));
     frags.forEach(f=>gsap.set(f,{x:r(-W*0.05,W*0.75),y:r(-H*0.25,H*0.95),z:r(-240,180),rotation:r(-16,16)}));
     gsap.set(line,{scaleY:0});
     // linha do tempo da montagem (é o scroll que a percorre)

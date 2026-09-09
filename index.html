@@ -1097,8 +1097,9 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
 
   /* ================= FAIXA 48H (criada depois do tour: gatilhos criados antes de um pin não recebem o deslocamento do pin) ================= */
   (function band(){const big=$('#big48'); if(!big)return;
-    const travel=()=>Math.min(big.scrollWidth-innerWidth*0.9, innerWidth*1.6);
-    gsap.fromTo(big,{x:()=>innerWidth*0.04},{x:()=>-travel(),ease:'none',immediateRender:true,scrollTrigger:{trigger:'.band',start:'top bottom',end:'bottom top',scrub:0.6,invalidateOnRefresh:true}});
+    const travel=()=>Math.min(big.scrollWidth-innerWidth*0.9, innerWidth*1.1);
+    // power2.in: o "48h" fica legível enquanto a faixa está no centro e acelera ao sair
+    gsap.fromTo(big,{x:()=>innerWidth*0.08},{x:()=>-travel(),ease:'power2.in',immediateRender:true,scrollTrigger:{trigger:'.band',start:'top bottom',end:'bottom top',scrub:0.6,invalidateOnRefresh:true}});
   })();
 
   /* ================= LINHA DOS PASSOS ================= */

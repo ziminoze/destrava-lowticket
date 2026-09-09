@@ -975,7 +975,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
   const fontsReady=Promise.race([
     Promise.all(fontSpecs.map(f=>document.fonts.load(f).catch(()=>{}))).then(()=>document.fonts.ready),
     new Promise(r=>setTimeout(r,3000))
-  ]).then(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
+  ]).then(()=>new Promise(r=>setTimeout(r,60))); // timer em vez de rAF: rAF pode ficar suspenso em abas/telas ocultas
   fontsReady.then(()=>{
     // H1: caracteres em 3D (autoSplit refaz a divisão se a fonte mudar depois)
     const big=$('.hero-title .big');

@@ -979,7 +979,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
   fontsReady.then(()=>{
     // H1: caracteres em 3D (autoSplit refaz a divisão se a fonte mudar depois)
     const big=$('.hero-title .big');
-    gsap.set(big,{visibility:'visible'});
+    gsap.set(big,{autoAlpha:1});
     SplitText.create(big,{type:'chars,words',mask:'chars',charsClass:'ch',autoSplit:true,onSplit:sp=>
       gsap.from(sp.chars,{yPercent:120,rotationX:-80,opacity:0,transformOrigin:'50% 100% -30px',stagger:{each:0.022,from:'start'},duration:1.3,ease:'power4.out',delay:0.15})});
 
@@ -998,13 +998,13 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
 
     // H2 e frases: linhas / palavras com máscara
     $$('[data-split="lines"]').forEach(el=>{
-      gsap.set(el,{visibility:'visible'});
+      gsap.set(el,{autoAlpha:1});
       SplitText.create(el,{type:'lines',mask:'lines',linesClass:'ln',autoSplit:true,onSplit:sp=>
         gsap.from(sp.lines,{yPercent:110,rotationX:-30,transformOrigin:'50% 100%',duration:1.1,stagger:0.09,ease:'power4.out',scrollTrigger:{trigger:el,start:'top 85%',once:true}})});
     });
     $$('[data-split="words"]').forEach(el=>{
       const inHero=!!el.closest('.hero');
-      gsap.set(el,{visibility:'visible'});
+      gsap.set(el,{autoAlpha:1});
       SplitText.create(el,{type:'words',mask:'words',autoSplit:true,onSplit:sp=>{
         const v={yPercent:110,opacity:0,duration:0.9,stagger:0.05,ease:'power4.out'};
         return inHero?gsap.from(sp.words,{...v,delay:1.1}):gsap.from(sp.words,{...v,scrollTrigger:{trigger:el,start:'top 85%',once:true}});

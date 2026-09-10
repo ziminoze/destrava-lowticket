@@ -415,6 +415,28 @@ h3{font-size:clamp(20px,1.6vw,26px);letter-spacing:-.02em;line-height:1.15}
 .value .statement .word{display:inline-block}
 .value .after{margin-top:34px;font-size:clamp(16px,1.3vw,20px);max-width:48ch;color:var(--muted)}
 
+
+/* ============ ANCORAGEM ============ */
+.anchor-grid{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:clamp(32px,5vw,90px);align-items:center}
+.anchor h2{max-width:12ch}
+.anchor-copy{margin-top:18px;max-width:52ch;font-size:clamp(16px,1.2vw,19px);color:var(--muted)}
+.anchor-copy.strong{color:var(--text);font-family:var(--display);font-weight:500;font-size:clamp(19px,1.6vw,26px);letter-spacing:-.02em;line-height:1.2;margin-top:26px}
+.anchor-box{border:1px solid var(--chat-border);border-radius:14px;padding:clamp(20px,2.4vw,32px);background:linear-gradient(160deg,#121816,#0b0f0e);transform-style:preserve-3d}
+.anchor-list{list-style:none;display:grid}
+.anchor-list li{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--border)}
+.ai-name b{display:block;font-weight:600;font-size:15.5px}.ai-name small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.ai-price{font-family:var(--mono);font-size:15px;white-space:nowrap;color:var(--muted)}
+.ai-price s{position:relative;text-decoration:none;display:inline-block}
+.ai-price s::after{content:"";position:absolute;left:-4px;right:-4px;top:52%;height:2px;background:#ff7b5c;transform:scaleX(0);transform-origin:left;border-radius:2px}
+.ai-price s.cut::after{transform:scaleX(1);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.anchor-total{display:flex;justify-content:space-between;align-items:center;padding:18px 0 6px;font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.anchor-total .ai-price.total{font-size:22px;color:var(--text)}.anchor-total .ai-price.total s::after{height:3px}
+.anchor-today{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-top:14px;padding-top:18px;border-top:1px dashed var(--chat-border);font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.today-price{font-family:var(--display);font-weight:700;font-size:clamp(48px,5vw,72px);letter-spacing:-.05em;line-height:1;color:var(--accent)}
+.today-price small{font-size:.38em;vertical-align:top;margin-right:4px;letter-spacing:-.02em}
+.anchor-box .cta{margin-top:22px;width:100%;justify-content:center}
+@media (max-width:980px){.anchor-grid{grid-template-columns:minmax(0,1fr)}}
+
 /* ============ OFFER ============ */
 .offer{overflow:hidden}
 .offer-box{position:relative;border:1px solid var(--chat-border);border-radius:14px;padding:clamp(28px,4vw,56px);background:linear-gradient(160deg,#121816,#0b0f0e);display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:clamp(24px,4vw,64px);align-items:center;transform-style:preserve-3d}
@@ -731,6 +753,33 @@ footer button{text-decoration:underline;text-underline-offset:3px}
   </div>
 </section>
 
+<!-- ================= 08b — ANCORAGEM ================= -->
+<!-- VALORES DE REFERÊNCIA PROVISÓRIOS: substituir pelos preços avulsos reais antes de publicar (o CDC exige preço de referência verdadeiro). -->
+<section class="anchor" id="ancoragem">
+  <div class="wrap anchor-grid">
+    <div>
+      <p class="eyebrow" data-reveal>O que isso custaria separado</p>
+      <h2 data-split="lines">Você não vai pagar nem perto disso.</h2>
+      <p class="anchor-copy" data-reveal>Cada peça foi feita para funcionar sozinha. Junta, vale mais do que a soma, porque é o conjunto que leva você do conhecimento ao link de compra.</p>
+      <p class="anchor-copy" data-reveal>Vendidas separadas, essas seis peças somariam o valor ao lado. Você não vai pagar isso. Nem a metade. Nem um quarto.</p>
+      <p class="anchor-copy strong" data-reveal>Hoje o conjunto inteiro sai por menos de 10% do valor somado.</p>
+    </div>
+    <div class="anchor-box" data-reveal="3d">
+      <ul class="anchor-list" id="anchorList">
+        <li><span class="ai-name"><b>Skill Destrava Lowticket completa</b><small>instruções que orientam a IA</small></span><span class="ai-price"><s>R$&nbsp;297</s></span></li>
+        <li><span class="ai-name"><b>Biblioteca de referências</b><small>oferta, funil, página, copy, anúncios e tráfego</small></span><span class="ai-price"><s>R$&nbsp;197</s></span></li>
+        <li><span class="ai-name"><b>Cinco aulas práticas</b><small>um projeto do início ao fim</small></span><span class="ai-price"><s>R$&nbsp;247</s></span></li>
+        <li><span class="ai-name"><b>Guia de uso por ambiente</b><small>ChatGPT, Claude e outras IAs</small></span><span class="ai-price"><s>R$&nbsp;67</s></span></li>
+        <li><span class="ai-name"><b>Roteiro das 48 horas</b><small>tarefas por dia</small></span><span class="ai-price"><s>R$&nbsp;97</s></span></li>
+        <li><span class="ai-name"><b>Checklist de publicação</b><small>produto, página, checkout e campanha</small></span><span class="ai-price"><s>R$&nbsp;47</s></span></li>
+      </ul>
+      <div class="anchor-total"><span>Somando tudo</span><span class="ai-price total"><s>R$&nbsp;<em id="anchorSum">952</em></s></span></div>
+      <div class="anchor-today"><span>Hoje, o conjunto inteiro</span><span class="today-price"><small>R$</small>67</span></div>
+      <a class="cta" href="#oferta">Quero colocar meu lowticket no ar <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    </div>
+  </div>
+</section>
+
 <!-- ================= 09 — PREÇO E COMPRA ================= -->
 <section class="offer" id="oferta">
   <div class="wrap">
@@ -917,6 +966,7 @@ function t(t,e,i){return Math.max(t,Math.min(e,i))}var e=class{isRunning=!1;valu
     $$('.step-btn').forEach(b=>b.classList.add('active'));
     const cap=$('#asmCap'); if(cap)cap.classList.add('done'); $$('.frag').forEach(f=>f.remove());
     const fin=$('.piece.final'); if(fin)fin.classList.add('lit');
+    $$('.ai-price s').forEach(x=>x.classList.add('cut'));
     $$('.step').forEach(s=>s.classList.add('on'));
     $('#railFill').style.transform='scaleY(1)';$('#stepsLine').style.transform='scaleY(1)';
     $$('.step-btn').forEach(b=>b.addEventListener('click',()=>$$('.tour-group')[+b.dataset.step].scrollIntoView({block:'center'})));
@@ -1138,6 +1188,17 @@ function t(t,e,i){return Math.max(t,Math.min(e,i))}var e=class{isRunning=!1;valu
     // power2.in: o "48h" fica legível enquanto a faixa está no centro e acelera ao sair
     gsap.fromTo(big,{x:()=>innerWidth*0.08},{x:()=>-travel(),ease:'power2.in',immediateRender:true,scrollTrigger:{trigger:'.band',start:'top bottom',end:'bottom top',scrub:0.6,invalidateOnRefresh:true}});
   })();
+
+  /* ================= ANCORAGEM: riscos animados e soma ================= */
+  try{(function anchor(){const list=$('#anchorList'); if(!list)return;
+    const cuts=$$('.ai-price s',list), total=$('.anchor-total s'), sum=$('#anchorSum'), today=$('.today-price');
+    const target=+sum.textContent; const o={v:0};
+    const tl=gsap.timeline({scrollTrigger:{trigger:'.anchor-box',start:'top 70%',once:true}});
+    cuts.forEach((c,i)=>tl.add(()=>c.classList.add('cut'),i*0.14));
+    tl.to(o,{v:target,duration:1,ease:'power2.out',onUpdate:()=>sum.textContent=Math.round(o.v)},0);
+    tl.add(()=>total.classList.add('cut'),1.15);
+    tl.fromTo(today,{scale:.8,autoAlpha:.4},{scale:1,autoAlpha:1,duration:.6,ease:'back.out(2)'},1.35);
+  })();}catch(e){console.warn('Ancoragem sem animação:',e.message)}
 
   /* ================= LINHA DOS PASSOS ================= */
   gsap.to('#stepsLine',{scaleY:1,ease:'none',scrollTrigger:{trigger:'#stepsList',start:'top 70%',end:'bottom 60%',scrub:true,
